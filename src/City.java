@@ -9,10 +9,10 @@ public class City {
         neighbors = new ArrayList<>();
         for(int i = 0; i < cities.length; i++){
             if(cities[i][0] == cityNumber){
-                neighbors.add(cities[i][0]);
+                neighbors.add(cities[i][1]);
             }
             else if(cities[i][1] == cityNumber){
-                neighbors.add(cities[i][1]);
+                neighbors.add(cities[i][0]);
             }
         }
     }
