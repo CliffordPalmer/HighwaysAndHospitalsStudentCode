@@ -20,6 +20,7 @@ public class HighwaysAndHospitals {
 //        }
         City[] places = new City[];
         return 0;
+
     }
 
 }
