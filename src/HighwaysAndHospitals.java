@@ -17,33 +17,54 @@ public class HighwaysAndHospitals {
      *  hospital access for all citizens in Menlo County.
      */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][]) {
-        for(int i = 0; i < cities.length; i ++){
-            System.out.println(cities[i][0] + ", " + cities[i][1]);
+        if(highwayCost > hospitalCost){
+            return (long)(n) * (hospitalCost);
         }
+        long price = 0;
 
         City[] places = new City[n + 1];
 
         for(int i = 1; i <= n; i++){
             places[i] = new City(i, cities);
         }
+        ArrayList<Integer> clusters = new ArrayList<>();
         Queue<City> toSearch = new LinkedList<City>();
-        boolean[] searched = new boolean[cities.length + 1];
+        boolean[] searched = new boolean[n + 1];
         int citiesLeft = n;
-        City current = places[1];
-        toSearch.add(current);
-
-        while(citiesLeft < 0){
+        City current;
+        toSearch.add(places[1]);
+        int citiesInCluster = 0;
+        while(citiesLeft > 0){
             if(toSearch.isEmpty()){
+                clusters.add(citiesInCluster);
+                citiesInCluster = 0;
                 for(int i = 1; i <= n; i++){
                     if(!searched[i]){
                         toSearch.add(places[i]);
+                        searched[i] = true;
                         break;
                     }
                 }
             }
+            current = toSearch.remove();
+            citiesInCluster++;
+            citiesLeft--;
+            ArrayList<Integer> neighbors = current.getNeighbors();
+
+            for(int i = 0; i < neighbors.size(); i++){
+                if(!searched[neighbors.get(i)]){
+                    toSearch.add(places[neighbors.get(i)]);
+                    searched[neighbors.get(i)] = true;
+                }
+            }
+        }
+        clusters.add(citiesInCluster);
+
+        for(int i = 0; i < clusters.size(); i++){
+            price += hospitalCost + (clusters.get(i) - 1)*highwayCost;
         }
 
-        return 0;
+        return price;
     }
 
 }
