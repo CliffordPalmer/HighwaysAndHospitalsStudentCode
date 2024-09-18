@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class City {
     private int cityNumber;
     private ArrayList<Integer> neighbors;
+    private int root;
 
     public City(int cityNumber, int[][] cities){
         this.cityNumber = cityNumber;
@@ -15,6 +16,7 @@ public class City {
                 neighbors.add(cities[i][0]);
             }
         }
+        root = 0;
     }
 
     public int getCityNumber() {
@@ -23,5 +25,13 @@ public class City {
 
     public ArrayList<Integer> getNeighbors() {
         return neighbors;
+    }
+
+    public int getRoot() {
+        return root;
+    }
+
+    public void setRoot(int root) {
+        this.root = root;
     }
 }
