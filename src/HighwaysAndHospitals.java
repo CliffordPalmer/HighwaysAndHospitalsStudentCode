@@ -22,14 +22,38 @@ public class HighwaysAndHospitals {
         }
         int[] roots = new int[n + 1];
         for(int i = 0; i < cities.length; i++){
-            if(roots[cities[i][1]] == 0) {
-                roots[cities[i][1]] = cities[i][0];
+            if(cities[i][0] > cities[i][1]){
+                if (roots[cities[i][0]] == 0) {
+                    roots[cities[i][0]] = cities[i][1];
+                } else if (roots[cities[i][1]] != roots[cities[i][0]]) {
+                    cities[i][0] = roots[roots[cities[i][0]]];
+                    roots[cities[i][0]] = cities[i][1];
+                }
             }
-            else if(roots[cities[i][0]] != roots[cities[i][1]]){
-                roots[cities[i][1]] = cities[i][0];
+            else {
+                if (roots[cities[i][1]] == 0) {
+                    roots[cities[i][1]] = cities[i][0];
+                } else if (roots[cities[i][0]] != roots[cities[i][1]]) {
+                    roots[cities[i][1]] = roots[roots[cities[i][1]]];
+                    roots[cities[i][1]] = cities[i][0];
+                }
             }
         }
         System.out.println("test");
+        long price = 0;
+        for(int i = 1; i < roots.length; i++){
+            if(roots[i] == 0){
+                int citiesInCluster = 1;
+                for(int j = 1; j < roots.length; j++){
+                    if(roots[j] == i){
+                        citiesInCluster ++;
+                    }
+                }
+                price += hospitalCost + (long)(citiesInCluster - 1)*highwayCost;
+            }
+        }
+        System.out.println(("test"));
+        return price;
 //        long price = 0;
 //
 //        City[] places = new City[n + 1];
@@ -74,7 +98,7 @@ public class HighwaysAndHospitals {
 //            price += hospitalCost + (clusters.get(i) - 1)*highwayCost;
 //        }
 
-        return 10;
+
     }
 
 }
