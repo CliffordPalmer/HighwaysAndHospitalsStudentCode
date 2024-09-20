@@ -17,88 +17,44 @@ public class HighwaysAndHospitals {
      *  hospital access for all citizens in Menlo County.
      */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][]) {
-        if(highwayCost > hospitalCost){
+        if(highwayCost >= hospitalCost){
             return (long)(n) * (hospitalCost);
         }
+
         int[] roots = new int[n + 1];
+
         for(int i = 0; i < cities.length; i++){
-            if(cities[i][0] > cities[i][1]){
-                if (roots[cities[i][0]] == 0) {
-                    roots[cities[i][0]] = cities[i][1];
-                } else if (roots[cities[i][1]] != roots[cities[i][0]]) {
-                    cities[i][0] = roots[roots[cities[i][0]]];
-                    roots[cities[i][0]] = cities[i][1];
-                }
+            int a = cities[i][0];
+            int b = cities[i][1];
+            int x = a;
+            while(roots[x] > 0){
+                x = roots[x];
             }
-            else {
-                if (roots[cities[i][1]] == 0) {
-                    roots[cities[i][1]] = cities[i][0];
-                } else if (roots[cities[i][0]] != roots[cities[i][1]]) {
-                    roots[cities[i][1]] = roots[roots[cities[i][1]]];
-                    roots[cities[i][1]] = cities[i][0];
-                }
+            while(roots[a] > 0){
+                int temp = roots[a];
+                roots[a] = x;
+                a = temp;
+            }
+            x = b;
+            while(roots[x] > 0){
+                x = roots[x];
+            }
+            while(roots[b] > 0){
+                int temp = roots[b];
+                roots[b] = x;
+                b = temp;
+            }
+            if(a != b){
+                roots[b] = a;
             }
         }
-        System.out.println("test");
-        long price = 0;
+        long clusters = 0;
         for(int i = 1; i < roots.length; i++){
-            if(roots[i] == 0){
-                int citiesInCluster = 1;
-                for(int j = 1; j < roots.length; j++){
-                    if(roots[j] == i){
-                        citiesInCluster ++;
-                    }
-                }
-                price += hospitalCost + (long)(citiesInCluster - 1)*highwayCost;
+            if(roots[i] <= 0){
+                clusters++;
             }
         }
-        System.out.println(("test"));
-        return price;
-//        long price = 0;
-//
-//        City[] places = new City[n + 1];
-//
-//        for(int i = 1; i <= n; i++){
-//            places[i] = new City(i, cities);
-//        }
-//        ArrayList<Integer> clusters = new ArrayList<>();
-//        Queue<City> toSearch = new LinkedList<City>();
-//        boolean[] searched = new boolean[n + 1];
-//        int citiesLeft = n;
-//        City current;
-//        toSearch.add(places[1]);
-//        int citiesInCluster = 0;
-//        while(citiesLeft > 0){
-//            if(toSearch.isEmpty()){
-//                clusters.add(citiesInCluster);
-//                citiesInCluster = 0;
-//                for(int i = 1; i <= n; i++){
-//                    if(!searched[i]){
-//                        toSearch.add(places[i]);
-//                        searched[i] = true;
-//                        break;
-//                    }
-//                }
-//            }
-//            current = toSearch.remove();
-//            citiesInCluster++;
-//            citiesLeft--;
-//            ArrayList<Integer> neighbors = current.getNeighbors();
-//
-//            for(int i = 0; i < neighbors.size(); i++){
-//                if(!searched[neighbors.get(i)]){
-//                    toSearch.add(places[neighbors.get(i)]);
-//                    searched[neighbors.get(i)] = true;
-//                }
-//            }
-//        }
-//        clusters.add(citiesInCluster);
-//
-//        for(int i = 0; i < clusters.size(); i++){
-//            price += hospitalCost + (clusters.get(i) - 1)*highwayCost;
-//        }
-
-
+        return clusters*hospitalCost + (long)(n-clusters)*highwayCost;
     }
-
 }
+
